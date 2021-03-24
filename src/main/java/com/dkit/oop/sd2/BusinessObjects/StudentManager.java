@@ -2,6 +2,7 @@ package com.dkit.oop.sd2.BusinessObjects;
 
 import com.dkit.oop.sd2.DAOs.MySqlStudentDao;
 import com.dkit.oop.sd2.DAOs.StudentDaoInterface;
+import com.dkit.oop.sd2.DTOs.Colours;
 import com.dkit.oop.sd2.DTOs.Student;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
@@ -37,6 +38,16 @@ public class StudentManager {
 //        studentsMap.put(10103333, new Student(10103333, "2002-04-01", "cats&dogs:)"));
 //        studentsMap.put(33330000, new Student(33330000, "2000-07-04", "guessMe1984"));
 
+    }
+
+    public static void StudentMenu()
+    {
+        System.out.println("\nOptions:");
+        for (int i = 0; i < LoginMenu.values().length; i++)
+        {
+            System.out.println("\t" + Colours.PURPLE + i + ". " + LoginMenu.values()[i].toString() + Colours.RESET);
+        }
+        System.out.println("Select an option (0 to quit): ");//Don't allow duplicates, ID values unique
     }
 
     public Student getStudent(Integer caoNumber) {
