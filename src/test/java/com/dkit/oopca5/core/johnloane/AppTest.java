@@ -1,8 +1,12 @@
 package com.dkit.oopca5.core.johnloane;
 
-import static org.junit.Assert.assertTrue;
-
+import com.dkit.oop.sd2.BusinessObjects.StudentManager;
+import com.dkit.oop.sd2.DAOs.MySqlStudentDao;
+import com.dkit.oop.sd2.DAOs.StudentDaoInterface;
+import com.dkit.oop.sd2.DTOs.Student;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Unit test for simple App.
@@ -16,5 +20,24 @@ public class AppTest
     public void shouldAnswerWithTrue()
     {
         assertTrue( true );
+    }
+
+    @Test
+    public void testAddStudentToStudentManager(){
+        StudentManager sm = new StudentManager();
+
+        int cao = 22223333;
+        String dob = "1999-11-26";
+        String pw = "w3e4r5";
+        Student expected = new Student(cao, dob, pw);
+        sm.addStudent(expected);
+
+        Student actual = sm.getStudent(22223333);
+        assertTrue(expected.equals(actual));
+    }
+
+    @Test
+    public void testStudentDao(){
+        StudentDaoInterface studentDao = new MySqlStudentDao();
     }
 }
