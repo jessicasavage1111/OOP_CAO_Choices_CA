@@ -1,4 +1,4 @@
-package com.dkit.oop.sd2.BusinessObjects;
+package com.dkit.oop.sd2.Client;
 
 public enum MainMenu {
     QUIT,

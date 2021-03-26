@@ -1,9 +1,9 @@
-package com.dkit.oop.sd2.BusinessObjects;
+package com.dkit.oop.sd2.Client;
 
-import com.dkit.oop.sd2.DAOs.MySqlStudentDao;
-import com.dkit.oop.sd2.DAOs.StudentDaoInterface;
-import com.dkit.oop.sd2.DTOs.Colours;
-import com.dkit.oop.sd2.DTOs.Student;
+import com.dkit.oop.sd2.DAOs_Server.MySqlStudentDao;
+import com.dkit.oop.sd2.DAOs_Server.StudentDaoInterface;
+import com.dkit.oop.sd2.DTOs_Core.Colours;
+import com.dkit.oop.sd2.DTOs_Core.Student;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
 import java.util.HashMap;
@@ -26,18 +26,11 @@ public class StudentManager {
             {
                 studentsMap.put(student.getCaoNumber(), student);
             }
-            System.out.println(studentsMap);
         }
         catch( DaoException e )
         {
             e.printStackTrace();
         }
-
-//        studentsMap.put(22224444, new Student(22224444, "1999-03-15", "Annie$101"));
-//        studentsMap.put(50501111, new Student(50501111, "2003-12-25", "banAnna$%"));
-//        studentsMap.put(10103333, new Student(10103333, "2002-04-01", "cats&dogs:)"));
-//        studentsMap.put(33330000, new Student(33330000, "2000-07-04", "guessMe1984"));
-
     }
 
     public static void StudentMenu()
@@ -68,6 +61,36 @@ public class StudentManager {
     }
 
     public void addStudent(int i, String s, String catsNdogs) {
+    }
+
+    boolean login(int caoNumber, String dateOfBirth, String password) {
+        if(getStudent(caoNumber) == null)
+        {
+            System.out.println(Colours.RED + "CAO Number cannot be found" + Colours.RESET);
+            return false;
+        }
+        else if (!getStudent(caoNumber).getPassword().equals(password))
+        {
+            System.out.println(Colours.RED + "Incorrect Password" + Colours.RESET);
+            return false;
+        }
+        else if (!getStudent(caoNumber).getDayOfBirth().equals(dateOfBirth))
+        {
+            System.out.println(Colours.RED + "Incorrect Date of Birth" + Colours.RESET);
+            return false;
+        }
+        else if (!getStudent(caoNumber).getDayOfBirth().equals(dateOfBirth) && !getStudent(caoNumber).getPassword().equals(password))
+        {
+            System.out.println(Colours.RED + "Incorrect Date of Birth and Password" + Colours.RESET);
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    public void register(Student student) {
+        addStudent(student);
     }
 
 //    isRegistered( caoNumber)

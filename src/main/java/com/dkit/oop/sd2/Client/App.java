@@ -1,4 +1,4 @@
-package com.dkit.oop.sd2.BusinessObjects;
+package com.dkit.oop.sd2.Client;
 
 /** OOP 2021
  * This App demonstrates the use of a Data Access Object (DAO)
@@ -18,7 +18,8 @@ package com.dkit.oop.sd2.BusinessObjects;
  */
 
 
-import com.dkit.oop.sd2.DTOs.Colours;
+import com.dkit.oop.sd2.DTOs_Core.Colours;
+import com.dkit.oop.sd2.DTOs_Core.Student;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -32,12 +33,12 @@ public class App
 
     public static void main( String[] args )
     {
-        System.out.println( "CAO Online - CA4" );
+        System.out.println( "CAO Online - CA5" );
         new App() .start();
     }
 
     private void start() {
-
+        StudentManager studentManager = new StudentManager();
         boolean loop= true;
         MainMenu menuOption;
         int option;
@@ -57,7 +58,14 @@ public class App
                         loginMenu();
                         break;
                     case REGISTER:
-                        adminMenu();
+                        System.out.println("Please enter CAO Number :");
+                        int caoNumber = keyboard.nextInt();
+                        System.out.println("Please enter Date of Birth in the format of 'year-month-day' :");
+                        String dateOfBirth = keyboard.next();
+                        System.out.println("Please enter Password : ");
+                        String password = keyboard.next();
+                        Student s = new Student(caoNumber, dateOfBirth, password);
+                        studentManager.register(s);
                         break;
                 }
             }
@@ -92,9 +100,7 @@ public class App
         // load courses
         CourseManager courseManager= new CourseManager();
 
-        CourseChoicesManager mgr = new CourseChoicesManager(studentManager, courseManager);
-//        mgr.readChoicesFile();
-//        mgr.saveChoicesToFile();
+
 
         System.out.println("Please enter CAO Number :");
         int caoNumber = keyboard.nextInt();
@@ -103,7 +109,7 @@ public class App
         System.out.println("Please enter Password : ");
         String password = keyboard.next();
 
-        if(mgr.login(caoNumber, dateOfBirth, password) == true)
+        if(studentManager.login(caoNumber, dateOfBirth,password) == true)
         {
             boolean loop = true;
             LoginMenu menuOption;
@@ -121,13 +127,13 @@ public class App
                         case DISPLAY_A_COURSE:
                             System.out.println("Enter Course ID: ");
                             String courseID = keyboard.next();
-                            System.out.println(mgr.getCourseDetails(courseID));
+                            System.out.println(courseManager.getCourse(courseID));
                             break;
                         case DISPLAY_ALL_COURSES:
                             System.out.println(courseManager.getAllCourses());
                             break;
                         case DISPLAY_CURRENT_CHOICES:
-                            mgr.getStudentChoices(caoNumber);
+
                             break;
                         case UPDATE_CHOICES:
                             ArrayList<String> choices = new ArrayList<>();
@@ -137,7 +143,7 @@ public class App
                                 String choice = keyboard.next();
                                 choices.add(choice);
                             }
-                            mgr.updateChoices(caoNumber, choices);
+
                             break;
                     }
                 } catch (IllegalArgumentException e) {

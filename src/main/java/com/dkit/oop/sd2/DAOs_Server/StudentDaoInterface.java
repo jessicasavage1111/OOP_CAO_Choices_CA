@@ -1,6 +1,6 @@
-package com.dkit.oop.sd2.DAOs;
+package com.dkit.oop.sd2.DAOs_Server;
 
-import com.dkit.oop.sd2.DTOs.Student;
+import com.dkit.oop.sd2.DTOs_Core.Student;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
 import java.util.List;

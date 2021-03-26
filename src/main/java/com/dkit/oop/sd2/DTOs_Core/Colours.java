@@ -1,4 +1,4 @@
-package com.dkit.oop.sd2.DTOs;
+package com.dkit.oop.sd2.DTOs_Core;
 
 public class Colours {
     public static final String RESET = "\u001B[0m";

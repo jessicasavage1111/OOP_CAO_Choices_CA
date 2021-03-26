@@ -1,9 +1,9 @@
 package com.dkit.oopca5.core.johnloane;
 
-import com.dkit.oop.sd2.BusinessObjects.StudentManager;
-import com.dkit.oop.sd2.DAOs.MySqlStudentDao;
-import com.dkit.oop.sd2.DAOs.StudentDaoInterface;
-import com.dkit.oop.sd2.DTOs.Student;
+import com.dkit.oop.sd2.Client.StudentManager;
+import com.dkit.oop.sd2.DAOs_Server.MySqlStudentDao;
+import com.dkit.oop.sd2.DAOs_Server.StudentDaoInterface;
+import com.dkit.oop.sd2.DTOs_Core.Student;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;

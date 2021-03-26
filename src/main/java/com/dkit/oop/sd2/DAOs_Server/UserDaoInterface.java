@@ -1,4 +1,4 @@
-package com.dkit.oop.sd2.DAOs;
+package com.dkit.oop.sd2.DAOs_Server;
 
 /** OOP 2021
  * UserDaoInterface
@@ -23,7 +23,7 @@ package com.dkit.oop.sd2.DAOs;
 
 
 
-import com.dkit.oop.sd2.DTOs.User;
+import com.dkit.oop.sd2.DTOs_Core.User;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 import java.util.List;
 
