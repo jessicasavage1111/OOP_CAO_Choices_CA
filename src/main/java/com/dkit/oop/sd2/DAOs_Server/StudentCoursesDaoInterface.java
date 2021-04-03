@@ -9,4 +9,9 @@ public interface StudentCoursesDaoInterface {
 
     public List<StudentCourses> findAllStudentCourses() throws DaoException;
 
+    public boolean addStudentCourses(int caoNumber, String courseid, int order) throws DaoException;
+
+    public StudentCourses findStudentCourses(int caoNumber) throws DaoException;
+
+    public boolean updateStudentCourses(int caoNumber, String courseid, int order) throws DaoException;
 }

@@ -18,10 +18,11 @@ package com.dkit.oop.sd2.Client;
  */
 
 
+import com.dkit.oop.sd2.DAOs_Server.*;
 import com.dkit.oop.sd2.DTOs_Core.Colours;
 import com.dkit.oop.sd2.DTOs_Core.Student;
+import com.dkit.oop.sd2.Exceptions.DaoException;
 
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -38,7 +39,7 @@ public class App
     }
 
     private void start() {
-        StudentManager studentManager = new StudentManager();
+        StudentDaoInterface studentDao = new MySqlStudentDao();
         boolean loop= true;
         MainMenu menuOption;
         int option;
@@ -65,7 +66,7 @@ public class App
                         System.out.println("Please enter Password : ");
                         String password = keyboard.next();
                         Student s = new Student(caoNumber, dateOfBirth, password);
-                        studentManager.register(s);
+                        studentDao.registerStudent(s);
                         break;
                 }
             }
@@ -80,6 +81,8 @@ public class App
             catch (NoSuchElementException e){
                 System.out.println("Selection out of range. Please try again: ");
                 keyboard.nextLine();
+            } catch (DaoException throwables) {
+                throwables.printStackTrace();
             }
         }
     }
@@ -93,12 +96,11 @@ public class App
         System.out.println("Enter a number to select option (enter 0 to cancel):>");
     }
 
-    private static void loginMenu(){
+    private static void loginMenu() throws DaoException {
         // load students
-        StudentManager studentManager = new StudentManager();
-
-        // load courses
-        CourseManager courseManager= new CourseManager();
+        StudentDaoInterface studentDao = new MySqlStudentDao();
+        CourseDaoInterface courseDao = new MySqlCourseDao();
+        StudentCoursesDaoInterface studentCourseDao = new MySqlStudentCoursesDao();
 
 
 
@@ -109,13 +111,37 @@ public class App
         System.out.println("Please enter Password : ");
         String password = keyboard.next();
 
-        if(studentManager.login(caoNumber, dateOfBirth,password) == true)
+        if(studentDao.findStudent(caoNumber) == null)
         {
+            System.out.println(Colours.RED + "CAO Number cannot be found" + Colours.RESET);
+
+        }
+        else if (!studentDao.findStudent(caoNumber).getDayOfBirth().equals(dateOfBirth) && !studentDao.findStudent(caoNumber).getPassword().equals(password))
+        {
+            System.out.println(Colours.RED + "Incorrect Date of Birth and Password" + Colours.RESET);
+
+        }
+        else if (!studentDao.findStudent(caoNumber).getPassword().equals(password))
+        {
+            System.out.println(Colours.RED + "Incorrect Password" + Colours.RESET);
+
+        }
+        else if (!studentDao.findStudent(caoNumber).getDayOfBirth().equals(dateOfBirth))
+        {
+            System.out.println(Colours.RED + "Incorrect Date of Birth" + Colours.RESET);
+
+        }
+        else{
             boolean loop = true;
             LoginMenu menuOption;
             int option1;
             while (loop) {
-                studentManager.StudentMenu();
+                System.out.println("\nOptions:");
+                for (int i = 0; i < LoginMenu.values().length; i++)
+                {
+                    System.out.println("\t" + Colours.PURPLE + i + ". " + LoginMenu.values()[i].toString() + Colours.RESET);
+                }
+                System.out.println("Select an option (0 to quit): ");//Don't allow duplicates, ID values unique
                 try {
                     option1 = keyboard.nextInt();
                     keyboard.nextLine();
@@ -127,23 +153,27 @@ public class App
                         case DISPLAY_A_COURSE:
                             System.out.println("Enter Course ID: ");
                             String courseID = keyboard.next();
-                            System.out.println(courseManager.getCourse(courseID));
+                            System.out.println(courseDao.findCourse(courseID));
                             break;
                         case DISPLAY_ALL_COURSES:
-                            System.out.println(courseManager.getAllCourses());
+                            System.out.println(courseDao.findAllCourses());
                             break;
                         case DISPLAY_CURRENT_CHOICES:
-
+                            System.out.println(studentCourseDao.findStudentCourses(caoNumber));
+                            break;
+                        case ADD_CHOICES:
+                            System.out.println("Enter Course ID: ");
+                            String aCourseID = keyboard.next();
+                            System.out.println("Enter Position of Course, eg between 1-10");
+                            int order = keyboard.nextInt();
+                            studentCourseDao.addStudentCourses(caoNumber, aCourseID, order);
                             break;
                         case UPDATE_CHOICES:
-                            ArrayList<String> choices = new ArrayList<>();
-                            choices.add(String.valueOf(caoNumber));
-                            for(int i = 1; i <= 10; i++){
-                                System.out.println("Enter the Course ID for the position " + i + " on your Course Choices list :");
-                                String choice = keyboard.next();
-                                choices.add(choice);
-                            }
-
+                            System.out.println("Enter Position you want to change");
+                            int change = keyboard.nextInt();
+                            System.out.println("Enter new course ID");
+                            String nCourseID = keyboard.next();
+                            studentCourseDao.updateStudentCourses(caoNumber, nCourseID, change);
                             break;
                     }
                 } catch (IllegalArgumentException e) {
@@ -155,6 +185,8 @@ public class App
                 } catch (InputMismatchException ime) {
                     System.out.println(Colours.RED + "InputMismatchException, Try again" + Colours.RESET);
                     keyboard.nextLine();
+                } catch (DaoException throwables) {
+                    throwables.printStackTrace();
                 }
             }
         }
