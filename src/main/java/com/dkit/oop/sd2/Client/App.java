@@ -59,12 +59,16 @@ public class App
                         loginMenu();
                         break;
                     case REGISTER:
+                        RegexChecker rc = new RegexChecker();
                         System.out.println("Please enter CAO Number :");
                         int caoNumber = keyboard.nextInt();
+                        rc.caoChecker(caoNumber);
                         System.out.println("Please enter Date of Birth in the format of 'year-month-day' :");
                         String dateOfBirth = keyboard.next();
+                        rc.dobChecker(dateOfBirth);
                         System.out.println("Please enter Password : ");
                         String password = keyboard.next();
+                        rc.passwordChecker(password);
                         Student s = new Student(caoNumber, dateOfBirth, password);
                         studentDao.registerStudent(s);
                         break;
@@ -101,15 +105,18 @@ public class App
         StudentDaoInterface studentDao = new MySqlStudentDao();
         CourseDaoInterface courseDao = new MySqlCourseDao();
         StudentCoursesDaoInterface studentCourseDao = new MySqlStudentCoursesDao();
-
+        RegexChecker rg = new RegexChecker();
 
 
         System.out.println("Please enter CAO Number :");
         int caoNumber = keyboard.nextInt();
+        rg.caoChecker(caoNumber);
         System.out.println("Please enter Date of Birth in the format of 'year-month-day' :");
         String dateOfBirth = keyboard.next();
+        rg.dobChecker(dateOfBirth);
         System.out.println("Please enter Password : ");
         String password = keyboard.next();
+        rg.passwordChecker(password);
 
         if(studentDao.findStudent(caoNumber) == null)
         {
