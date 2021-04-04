@@ -173,7 +173,12 @@ public class App
                             String aCourseID = keyboard.next();
                             System.out.println("Enter Position of Course, eg between 1-10");
                             int order = keyboard.nextInt();
-                            studentCourseDao.addStudentCourses(caoNumber, aCourseID, order);
+                            if (order <= 0 || order > 10){
+                                System.out.println("Invalid Position");
+                            }
+                            else {
+                                studentCourseDao.addStudentCourses(caoNumber, aCourseID, order);
+                            }
                             break;
                         case UPDATE_CHOICES:
                             System.out.println("Enter Position you want to change");
