@@ -21,6 +21,7 @@ package com.dkit.oop.sd2.Client;
 import com.dkit.oop.sd2.DAOs_Server.*;
 import com.dkit.oop.sd2.DTOs_Core.Colours;
 import com.dkit.oop.sd2.DTOs_Core.Student;
+import com.dkit.oop.sd2.DTOs_Core.StudentCourses;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
 import java.util.InputMismatchException;
@@ -169,23 +170,18 @@ public class App
                             System.out.println(studentCourseDao.findStudentCourses(caoNumber));
                             break;
                         case ADD_CHOICES:
-                            System.out.println("Enter Course ID: ");
-                            String aCourseID = keyboard.next();
-                            System.out.println("Enter Position of Course, eg between 1-10");
-                            int order = keyboard.nextInt();
-                            if (order <= 0 || order > 10){
-                                System.out.println("Invalid Position");
-                            }
-                            else {
-                                studentCourseDao.addStudentCourses(caoNumber, aCourseID, order);
+                            for(int i = 1; i <= 10; i++){
+                                System.out.println("Enter the Course ID for the position " + i + " on your Course Choices list :");
+                                String aChoice = keyboard.next();
+                                studentCourseDao.addStudentCourses(new StudentCourses(caoNumber, aChoice, i));
                             }
                             break;
                         case UPDATE_CHOICES:
-                            System.out.println("Enter Position you want to change");
-                            int change = keyboard.nextInt();
-                            System.out.println("Enter new course ID");
-                            String nCourseID = keyboard.next();
-                            studentCourseDao.updateStudentCourses(caoNumber, nCourseID, change);
+                            for(int i = 1; i <= 10; i++){
+                                System.out.println("Enter the Course ID for the position " + i + " on your Course Choices list :");
+                                String choice = keyboard.next();
+                                studentCourseDao.updateStudentCourses(new StudentCourses(caoNumber, choice, i));
+                            }
                             break;
                     }
                 } catch (IllegalArgumentException e) {

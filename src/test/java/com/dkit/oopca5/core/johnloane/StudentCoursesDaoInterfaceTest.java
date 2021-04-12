@@ -66,7 +66,7 @@ public class StudentCoursesDaoInterfaceTest {
         String course = "DB509";
         int order = 3;
 
-        boolean expected = studentCourseDao.updateStudentCourses(cao,course,order);
+        boolean expected = studentCourseDao.updateStudentCourses(new StudentCourses(cao,course,order));
         assertTrue(expected);
     }
 

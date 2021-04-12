@@ -67,7 +67,7 @@ public class MySqlStudentCoursesDao extends MySqlDao implements StudentCoursesDa
     }
 
     @Override
-    public boolean addStudentCourses(int caoNumber, String courseid, int order) throws DaoException
+    public boolean addStudentCourses(StudentCourses c) throws DaoException
     {
         Connection con = null;
         PreparedStatement ps = null;
@@ -82,10 +82,9 @@ public class MySqlStudentCoursesDao extends MySqlDao implements StudentCoursesDa
             String query = "INSERT INTO student_courses VALUES (?,?,?)";
             ps = con.prepareStatement(query);
 
-            ps.setInt(1, caoNumber);
-            ps.setString(2, courseid);
-            ps.setInt(3, order);
-
+            ps.setInt(1, c.getCaoNumber());
+            ps.setString(2, c.getCourseId());
+            ps.setInt(3, c.getOrder());
 
             //Using a PreparedStatement to execute SQL - UPDATE...
             success = (ps.executeUpdate() == 1);
@@ -118,9 +117,10 @@ public class MySqlStudentCoursesDao extends MySqlDao implements StudentCoursesDa
     }
 
     @Override
-    public boolean updateStudentCourses(int caoNumber, String courseid, int order) throws DaoException
+    public boolean updateStudentCourses(StudentCourses c) throws DaoException
     {
         Connection con = null;
+        PreparedStatement delete = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         boolean success = false;
@@ -130,13 +130,17 @@ public class MySqlStudentCoursesDao extends MySqlDao implements StudentCoursesDa
             //Get connection object using the methods in the super class (MySqlDao.java)...
             con = this.getConnection();
 
-            String query = "UPDATE student_courses SET courseid = ? WHERE EXISTS(SELECT * FROM student_courses WHERE caoNumber = ? AND order = ?)";
-            ps = con.prepareStatement(query);
+            String query = "DELETE FROM student_courses WHERE caoNumber = ?";
+            delete = con.prepareStatement(query);
+            delete.setInt(1, c.getCaoNumber());
+            delete.execute();
 
-            ps.setString(1, courseid);
-            ps.setInt(2, caoNumber);
-            ps.setInt(3, order);
+            String query2 = "INSERT INTO student_courses VALUES (?,?,?)";
+            ps = con.prepareStatement(query2);
 
+            ps.setInt(1, c.getCaoNumber());
+            ps.setString(2, c.getCourseId());
+            ps.setInt(3, c.getOrder());
 
             //Using a PreparedStatement to execute SQL - UPDATE...
             success = (ps.executeUpdate() == 1);
