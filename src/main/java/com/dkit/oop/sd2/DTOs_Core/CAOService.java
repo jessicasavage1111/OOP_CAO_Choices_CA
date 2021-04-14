@@ -13,4 +13,6 @@ public class CAOService
     public static final String REGISTER_COMMAND = "REGISTER";
     public static final String SUCCESSFUL_REGISTER = "REGISTERED";
     public static final String FAILED_REGISTER = "REG FAILED";
+
+    public static final String LOGIN = "LOGIN";
 }

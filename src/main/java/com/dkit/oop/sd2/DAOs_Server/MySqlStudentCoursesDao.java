@@ -67,7 +67,7 @@ public class MySqlStudentCoursesDao extends MySqlDao implements StudentCoursesDa
     }
 
     @Override
-    public boolean addStudentCourses(StudentCourses c) throws DaoException
+    public boolean addStudentCourses(int caoNumber, ArrayList<String> courseList) throws DaoException
     {
         Connection con = null;
         PreparedStatement ps = null;
@@ -79,15 +79,19 @@ public class MySqlStudentCoursesDao extends MySqlDao implements StudentCoursesDa
             //Get connection object using the methods in the super class (MySqlDao.java)...
             con = this.getConnection();
 
-            String query = "INSERT INTO student_courses VALUES (?,?,?)";
-            ps = con.prepareStatement(query);
+            for(int i = 0; i <= courseList.size(); i++) {
+                int count = 1;
+                String query2 = "INSERT INTO student_courses VALUES (?,?,?)";
+                ps = con.prepareStatement(query2);
 
-            ps.setInt(1, c.getCaoNumber());
-            ps.setString(2, c.getCourseId());
-            ps.setInt(3, c.getOrder());
+                ps.setInt(1, caoNumber);
+                ps.setString(2, courseList.get(i));
+                ps.setInt(3, count);
+                count++;
 
-            //Using a PreparedStatement to execute SQL - UPDATE...
-            success = (ps.executeUpdate() == 1);
+                //Using a PreparedStatement to execute SQL - UPDATE...
+                success = (ps.executeUpdate() == 1);
+            }
 
         } catch (SQLException e)
         {
@@ -117,7 +121,7 @@ public class MySqlStudentCoursesDao extends MySqlDao implements StudentCoursesDa
     }
 
     @Override
-    public boolean updateStudentCourses(StudentCourses c) throws DaoException
+    public boolean updateStudentCourses(int caoNumber, ArrayList<String> courseList) throws DaoException
     {
         Connection con = null;
         PreparedStatement delete = null;
@@ -132,19 +136,22 @@ public class MySqlStudentCoursesDao extends MySqlDao implements StudentCoursesDa
 
             String query = "DELETE FROM student_courses WHERE caoNumber = ?";
             delete = con.prepareStatement(query);
-            delete.setInt(1, c.getCaoNumber());
+            delete.setInt(1, caoNumber);
             delete.execute();
 
-            String query2 = "INSERT INTO student_courses VALUES (?,?,?)";
-            ps = con.prepareStatement(query2);
+            for(int i = 0; i <= courseList.size(); i++) {
+                int count = 1;
+                String query2 = "INSERT INTO student_courses VALUES (?,?,?)";
+                ps = con.prepareStatement(query2);
 
-            ps.setInt(1, c.getCaoNumber());
-            ps.setString(2, c.getCourseId());
-            ps.setInt(3, c.getOrder());
+                ps.setInt(1, caoNumber);
+                ps.setString(2, courseList.get(i));
+                ps.setInt(3, count);
+                count++;
 
-            //Using a PreparedStatement to execute SQL - UPDATE...
-            success = (ps.executeUpdate() == 1);
-
+                //Using a PreparedStatement to execute SQL - UPDATE...
+                success = (ps.executeUpdate() == 1);
+            }
         } catch (SQLException e)
         {
             throw new DaoException("updateStudentCourses() " + e.getMessage());

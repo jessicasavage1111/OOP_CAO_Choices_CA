@@ -21,9 +21,9 @@ package com.dkit.oop.sd2.Client;
 import com.dkit.oop.sd2.DAOs_Server.*;
 import com.dkit.oop.sd2.DTOs_Core.Colours;
 import com.dkit.oop.sd2.DTOs_Core.Student;
-import com.dkit.oop.sd2.DTOs_Core.StudentCourses;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -170,18 +170,23 @@ public class App
                             System.out.println(studentCourseDao.findStudentCourses(caoNumber));
                             break;
                         case ADD_CHOICES:
+                            ArrayList <String> addedCourseList = new ArrayList<>(10);
                             for(int i = 1; i <= 10; i++){
                                 System.out.println("Enter the Course ID for the position " + i + " on your Course Choices list :");
                                 String aChoice = keyboard.next();
-                                studentCourseDao.addStudentCourses(new StudentCourses(caoNumber, aChoice, i));
+                                addedCourseList.add(aChoice);
                             }
+                            studentCourseDao.addStudentCourses(caoNumber, addedCourseList);
                             break;
                         case UPDATE_CHOICES:
+                            ArrayList <String> courseList = new ArrayList<>(10);
                             for(int i = 1; i <= 10; i++){
                                 System.out.println("Enter the Course ID for the position " + i + " on your Course Choices list :");
                                 String choice = keyboard.next();
-                                studentCourseDao.updateStudentCourses(new StudentCourses(caoNumber, choice, i));
+                                courseList.add(choice);
                             }
+                            //pass through list of courseID updateStudentCourses (caoNumber, courseList);
+                            studentCourseDao.updateStudentCourses(caoNumber, courseList);
                             break;
                     }
                 } catch (IllegalArgumentException e) {
