@@ -19,7 +19,6 @@ package com.dkit.oop.sd2.Client;
  */
 
 
-import com.dkit.oop.sd2.DAOs_Server.*;
 import com.dkit.oop.sd2.DTOs_Core.CAOService;
 import com.dkit.oop.sd2.DTOs_Core.Colours;
 import com.dkit.oop.sd2.Exceptions.DaoException;
@@ -36,6 +35,25 @@ import java.util.Scanner;
 public class App {
 
     private static Scanner keyboard = new Scanner(System.in);
+    private static Socket socket;
+
+    static {
+        try {
+            socket = new Socket(CAOService.HOSTNAME, 8080);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Scanner socketReader;
+
+    static {
+        try {
+            socketReader = new Scanner(socket.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         System.out.println("CAO Online - CA5");
@@ -50,12 +68,8 @@ public class App {
 
         Scanner in = new Scanner(System.in);
         try {
-
-            Socket socket = new Socket(CAOService.HOSTNAME, 8080);  // connect to server socket
             System.out.println("Client: Port# of this client : " + socket.getLocalPort());
             System.out.println("Client: Port# of Server :" + socket.getPort());
-
-            Scanner socketReader = new Scanner(socket.getInputStream());
 
             System.out.println("Client message: The Client is running and has connected to the server");
 
@@ -139,15 +153,6 @@ public class App {
 
         Scanner in = new Scanner(System.in);
         try {
-
-            Socket socket = new Socket(CAOService.HOSTNAME, 8080);  // connect to server socket
-            System.out.println("Client: Port# of this client : " + socket.getLocalPort());
-            System.out.println("Client: Port# of Server :" + socket.getPort());
-
-            Scanner socketReader = new Scanner(socket.getInputStream());
-
-            System.out.println("Client message: The Client is running and has connected to the server");
-
             OutputStream os = socket.getOutputStream();
             PrintWriter socketWriter = new PrintWriter(os, true);   // true => auto flush buffers
 
@@ -161,10 +166,10 @@ public class App {
             String password = keyboard.next();
             rg.passwordChecker(password);
 
-            String regCommand = CAOService.LOGIN + CAOService.BREAKING_CHARACTER + caoNumber + CAOService.BREAKING_CHARACTER + dateOfBirth + CAOService.BREAKING_CHARACTER + password;
-            socketWriter.println(regCommand);
+            String loginCommand = CAOService.LOGIN + CAOService.BREAKING_CHARACTER + caoNumber + CAOService.BREAKING_CHARACTER + dateOfBirth + CAOService.BREAKING_CHARACTER + password;
+            socketWriter.println(loginCommand);
 
-            if (regCommand.startsWith(CAOService.LOGIN))   //we expect the server to return a time
+            if (loginCommand.startsWith(CAOService.LOGIN))   //we expect the server to return a time
             {
                 String reply = socketReader.nextLine(); //wait for reply from server
                 if (reply.startsWith(CAOService.SUCCESSFUL_LOGIN)) {
@@ -188,13 +193,13 @@ public class App {
                                 case DISPLAY_A_COURSE:
                                     System.out.println("Enter Course ID: ");
                                     String courseID = keyboard.next();
-                                    System.out.println(courseDao.findCourse(courseID));
+                                    //System.out.println(courseDao.findCourse(courseID));
                                     break;
                                 case DISPLAY_ALL_COURSES:
-                                    System.out.println(courseDao.findAllCourses());
+                                    //System.out.println(courseDao.findAllCourses());
                                     break;
                                 case DISPLAY_CURRENT_CHOICES:
-                                    System.out.println(studentCourseDao.findStudentCourses(caoNumber));
+                                    //System.out.println(studentCourseDao.findStudentCourses(caoNumber));
                                     break;
                                 case ADD_CHOICES:
                                     ArrayList<String> addedCourseList = new ArrayList<>(10);
@@ -203,7 +208,7 @@ public class App {
                                         String aChoice = keyboard.next();
                                         addedCourseList.add(aChoice);
                                     }
-                                    studentCourseDao.addStudentCourses(caoNumber, addedCourseList);
+                                    //studentCourseDao.addStudentCourses(caoNumber, addedCourseList);
                                     break;
                                 case UPDATE_CHOICES:
                                     ArrayList<String> courseList = new ArrayList<>(10);
@@ -213,7 +218,7 @@ public class App {
                                         courseList.add(choice);
                                     }
                                     //pass through list of courseID updateStudentCourses (caoNumber, courseList);
-                                    studentCourseDao.updateStudentCourses(caoNumber, courseList);
+                                    //studentCourseDao.updateStudentCourses(caoNumber, courseList);
                                     break;
                             }
                         } catch (IllegalArgumentException e) {
@@ -225,8 +230,6 @@ public class App {
                         } catch (InputMismatchException ime) {
                             System.out.println(Colours.RED + "InputMismatchException, Try again" + Colours.RESET);
                             keyboard.nextLine();
-                        } catch (DaoException throwables) {
-                            throwables.printStackTrace();
                         }
                     }
                 }

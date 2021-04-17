@@ -37,15 +37,10 @@ package com.dkit.oop.sd2.DAOs_Server;
 
 
 import com.dkit.oop.sd2.DTOs_Core.CAOService;
-import com.dkit.oop.sd2.DTOs_Core.Colours;
 import com.dkit.oop.sd2.DTOs_Core.Student;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -151,24 +146,25 @@ public class CAOServer
                     }
                     else if (parts[0].equals(CAOService.LOGIN))
                     {
-                        if(studentDao.findStudent(Integer.parseInt(parts[1])) == null){
-                            socketWriter.println(CAOService.FAILED_LOGIN);
-                            socketWriter.println(Colours.RED + "CAO Number cannot be found" + Colours.RESET);
+                        try {
+                            if (studentDao.findStudent(Integer.parseInt(parts[1])) == null) {
+                                socketWriter.println(CAOService.FAILED_LOGIN);
+                                System.out.println("CAO Number cannot be found");
+                            } else if (!(studentDao.findStudent(Integer.parseInt(parts[1])).getPassword().contentEquals(parts[3])) && !(studentDao.findStudent(Integer.parseInt(parts[1])).getDayOfBirth().contentEquals(parts[2]))) {
+                                socketWriter.println(CAOService.FAILED_LOGIN);
+                                System.out.println("Incorrect Date of Birth and Password");
+                            } else if (!(studentDao.findStudent(Integer.parseInt(parts[1])).getDayOfBirth().contentEquals(parts[2]))) {
+                                socketWriter.println(CAOService.FAILED_LOGIN);
+                                System.out.println("Incorrect Date of Birth");
+                            } else if (!(studentDao.findStudent(Integer.parseInt(parts[1])).getPassword().contentEquals(parts[3]))) {
+                                socketWriter.println(CAOService.FAILED_LOGIN);
+                                System.out.println("Incorrect Password");
+                            } else {
+                                socketWriter.println(CAOService.SUCCESSFUL_LOGIN);
+                            }
                         }
-                        else if (studentDao.findStudent(Integer.parseInt(parts[1])).getPassword() != parts[3] && studentDao.findStudent(Integer.parseInt(parts[1])).getDayOfBirth() != parts[2]){
-                            socketWriter.println(CAOService.FAILED_LOGIN);
-                            socketWriter.println(Colours.RED + "Incorrect Date of Birth and Password" + Colours.RESET);
-                        }
-                        else if (studentDao.findStudent(Integer.parseInt(parts[1])).getPassword() != parts[3]){
-                            socketWriter.println(CAOService.FAILED_LOGIN);
-                            socketWriter.println(Colours.RED + "Incorrect Password" + Colours.RESET);
-                        }
-                        else if (studentDao.findStudent(Integer.parseInt(parts[1])).getPassword() != parts[3]){
-                            socketWriter.println(CAOService.FAILED_LOGIN);
-                            socketWriter.println(Colours.RED + "Incorrect Password" + Colours.RESET);
-                        }
-                        else{
-                            socketWriter.println(CAOService.SUCCESSFUL_LOGIN);
+                        catch (DaoException throwables) {
+                            System.out.println("dao exception thrown, possible duplicates with the cao number");
                         }
                     }
                     else
@@ -179,7 +175,7 @@ public class CAOServer
 
                 socket.close();
 
-            } catch (IOException | DaoException ex)
+            } catch (IOException ex)
             {
                 ex.printStackTrace();
             }
