@@ -37,12 +37,15 @@ package com.dkit.oop.sd2.DAOs_Server;
 
 
 import com.dkit.oop.sd2.DTOs_Core.CAOService;
+import com.dkit.oop.sd2.DTOs_Core.Course;
 import com.dkit.oop.sd2.DTOs_Core.Student;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CAOServer
 {
@@ -164,8 +167,51 @@ public class CAOServer
                             }
                         }
                         catch (DaoException throwables) {
-                            System.out.println("dao exception thrown, possible duplicates with the cao number");
+                            System.out.println("invalid login");
                         }
+                    }
+                    else if (parts[0].equals(CAOService.LOGOUT))
+                    {
+
+                    }
+                    else if (parts[0].equals(CAOService.DISPLAY_COURSE))
+                    {
+                        try {
+                            if (!(courseDao.findCourse(parts[1]) == null)) {
+                                socketWriter.println(courseDao.findCourse(parts[1]).getCourseId() + CAOService.BREAKING_CHARACTER + courseDao.findCourse(parts[1]).getTitle() + CAOService.BREAKING_CHARACTER + courseDao.findCourse(parts[1]).getLevel() + CAOService.BREAKING_CHARACTER + courseDao.findCourse(parts[1]).getInstitution());
+                                System.out.println("Course Found");
+                            } else {
+                                socketWriter.println(CAOService.DISPLAY_FAILED);
+                            }
+                        }
+                        catch (DaoException throwables) {
+                            System.out.println("course not found");
+                        }
+                    }
+                    else if (parts[0].equals(CAOService.DISPLAY_ALL))
+                    {
+                        List<Course> courses = new ArrayList<>();
+                        try {
+                            courses = courseDao.findAllCourses();
+                        }
+                        catch (DaoException throwables) {
+                            System.out.println("unable to find courses");
+                        }
+                        if(courses == null){
+                            socketWriter.println(CAOService.DISPLAY_ALL_FAILED);
+                        }
+                        else{
+                            socketWriter.println(courses);
+                        }
+
+                    }
+                    else if (parts[0].equals(CAOService.DISPLAY_CURRENT))
+                    {
+
+                    }
+                    else if (parts[0].equals(CAOService.UPDATE_CHOICES))
+                    {
+
                     }
                     else
                     {

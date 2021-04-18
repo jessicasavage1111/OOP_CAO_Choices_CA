@@ -148,7 +148,7 @@ public class App {
         System.out.println("Enter a number to select option (enter 0 to cancel):>");
     }
 
-    private static void loginMenu() throws DaoException {
+    private static void loginMenu() throws DaoException, IllegalArgumentException {
         RegexChecker rg = new RegexChecker();
 
         Scanner in = new Scanner(System.in);
@@ -193,22 +193,39 @@ public class App {
                                 case DISPLAY_A_COURSE:
                                     System.out.println("Enter Course ID: ");
                                     String courseID = keyboard.next();
-                                    //System.out.println(courseDao.findCourse(courseID));
+
+                                    String displayCommand = CAOService.DISPLAY_COURSE + CAOService.BREAKING_CHARACTER + courseID;
+                                    socketWriter.println(displayCommand);
+
+                                    if (displayCommand.startsWith(CAOService.DISPLAY_COURSE))   //we expect the server to return a time
+                                    {
+                                        String display = socketReader.nextLine(); //wait for reply from server
+                                        if (display.startsWith(CAOService.DISPLAY_FAILED)) {
+                                            System.out.println(display);
+                                        }
+                                        else{
+                                            String displayA[] = display.split(CAOService.BREAKING_CHARACTER);
+                                            System.out.println(displayA);
+                                        }
+                                    }
                                     break;
                                 case DISPLAY_ALL_COURSES:
-                                    //System.out.println(courseDao.findAllCourses());
+                                    String displayAllCommand = CAOService.DISPLAY_ALL;
+                                    socketWriter.println(displayAllCommand);
+
+                                    if (displayAllCommand.startsWith(CAOService.DISPLAY_ALL))   //we expect the server to return a time
+                                    {
+                                        String display = socketReader.nextLine(); //wait for reply from server
+                                        if (display.startsWith(CAOService.DISPLAY_ALL_FAILED)) {
+                                            System.out.println(display);
+                                        }
+                                        else{
+                                            System.out.println(display);
+                                        }
+                                    }
                                     break;
                                 case DISPLAY_CURRENT_CHOICES:
                                     //System.out.println(studentCourseDao.findStudentCourses(caoNumber));
-                                    break;
-                                case ADD_CHOICES:
-                                    ArrayList<String> addedCourseList = new ArrayList<>(10);
-                                    for (int i = 1; i <= 10; i++) {
-                                        System.out.println("Enter the Course ID for the position " + i + " on your Course Choices list :");
-                                        String aChoice = keyboard.next();
-                                        addedCourseList.add(aChoice);
-                                    }
-                                    //studentCourseDao.addStudentCourses(caoNumber, addedCourseList);
                                     break;
                                 case UPDATE_CHOICES:
                                     ArrayList<String> courseList = new ArrayList<>(10);
@@ -221,9 +238,6 @@ public class App {
                                     //studentCourseDao.updateStudentCourses(caoNumber, courseList);
                                     break;
                             }
-                        } catch (IllegalArgumentException e) {
-                            System.out.println(Colours.RED + "IllegalArgumentException, Try again" + Colours.RESET);
-                            keyboard.nextLine();
                         } catch (ArrayIndexOutOfBoundsException e) {
                             System.out.println(Colours.RED + "ArrayIndexOutOfBoundsException, Try again" + Colours.RESET);
                             keyboard.nextLine();

@@ -21,13 +21,13 @@ public class CAOService
     public static final String LOGOUT = "LOGOUT";
 
     public static final String DISPLAY_COURSE = "DISPLAY COURSE";
+    public static final String DISPLAY_FAILED = "DISPLAY COURSE FAILED";
+
     public static final String DISPLAY_ALL = "DISPLAY ALL";
+    public static final String DISPLAY_ALL_FAILED = "DISPLAY ALL FAILED";
 
     public static final String DISPLAY_CURRENT = "DISPLAY CURRENT";
-
-    public static final String ADD_CHOICES = "ADD";
-    public static final String SUCCESSFUL_ADD = "ADDED";
-    public static final String FAILED_ADD = "ADD FAILED";
+    public static final String DISPLAY_CURRENT_FAILED = "DISPLAY CURRENT FAILED";
 
     public static final String UPDATE_CHOICES = "UPDATE";
     public static final String SUCCESSFUL_UPDATE = "UPDATED";
