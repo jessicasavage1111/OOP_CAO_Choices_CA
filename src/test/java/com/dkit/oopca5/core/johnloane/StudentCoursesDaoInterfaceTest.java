@@ -4,14 +4,12 @@ import com.dkit.oop.sd2.DAOs_Server.MySqlStudentCoursesDao;
 import com.dkit.oop.sd2.DAOs_Server.StudentCoursesDaoInterface;
 import com.dkit.oop.sd2.DTOs_Core.StudentCourses;
 import com.dkit.oop.sd2.Exceptions.DaoException;
-
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
-
-import static org.junit.Assert.assertNotNull;
 
 public class StudentCoursesDaoInterfaceTest {
     @Test
@@ -36,12 +34,13 @@ public class StudentCoursesDaoInterfaceTest {
 
         StudentCoursesDaoInterface studentCourseDao = new MySqlStudentCoursesDao();
         int cao = 12345673;
-        String course = "DB509";
-        int order = 1;
+        ArrayList<String> courseList = new ArrayList<>(10);
+        courseList.add("CK208");
 
-        StudentCourses expected = new StudentCourses(cao, course, order);
-        //studentCourseDao.addStudentCourses(cao, course, order);
-        //StudentCourses actual = studentCourseDao.findStudentCourses(cao);
+        studentCourseDao.addStudentCourses(cao, courseList);
+        List<StudentCourses> actual = studentCourseDao.findStudentCourses(cao);
+
+        String expected = "[StudentCourses{caoNumber=12345673, courseId='CK208', order=1}]";
 
         assertEquals(expected,actual);
         System.out.println("actual: " + actual);
@@ -54,7 +53,7 @@ public class StudentCoursesDaoInterfaceTest {
         StudentCoursesDaoInterface studentCourseDao = new MySqlStudentCoursesDao();
         int cao = 12345673;
 
-        //StudentCourses actual = studentCourseDao.findStudentCourses(cao);
+        List<StudentCourses> actual = studentCourseDao.findStudentCourses(cao);
         assertNotNull(actual);
     }
 
@@ -63,11 +62,11 @@ public class StudentCoursesDaoInterfaceTest {
     public void testUpdateStudentCourses() throws DaoException {
         StudentCoursesDaoInterface studentCourseDao = new MySqlStudentCoursesDao();
         int cao = 12345673;
-        String course = "DB509";
-        int order = 3;
+        ArrayList<String> courseList = new ArrayList<>(10);
+        courseList.add("DB500");
 
-       // boolean expected = studentCourseDao.updateStudentCourses(new StudentCourses(cao,course,order));
-      //  assertTrue(expected);
+       boolean expected = studentCourseDao.updateStudentCourses(cao, courseList);
+       assertTrue(expected);
     }
 
 }

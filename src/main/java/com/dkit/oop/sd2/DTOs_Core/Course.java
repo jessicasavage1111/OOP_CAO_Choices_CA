@@ -48,7 +48,7 @@ public class Course {
     public String toString() {
         return "Course{" +
                 "courseId='" + courseId + '\'' +
-                "title='" + title + '\'' +
+                ", title='" + title + '\'' +
                 ", level='" + level + '\'' +
                 ", institution='" + institution + '\'' +
                 '}';

@@ -225,7 +225,14 @@ public class CAOServer
                     }
                     else if (parts[0].equals(CAOService.UPDATE_CHOICES))
                     {
-
+                        boolean success = false;
+                        //success = studentCourseDao.updateStudentCourses(parts[1], parts[2]);
+                        if(success){
+                            socketWriter.println(CAOService.SUCCESSFUL_REGISTER);
+                        }
+                        else{
+                            socketWriter.println(CAOService.FAILED_REGISTER);
+                        }
                     }
                     else
                     {

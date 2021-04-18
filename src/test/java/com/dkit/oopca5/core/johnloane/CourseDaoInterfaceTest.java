@@ -27,6 +27,7 @@ public class CourseDaoInterfaceTest {
         System.out.println("Actual: " + actual);
         System.out.println("Expected: " + expected);
     }
+
     @Test
     public void testFindCourse() throws DaoException {
         CourseDaoInterface courseDao = new MySqlCourseDao();

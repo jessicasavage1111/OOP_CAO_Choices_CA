@@ -224,7 +224,7 @@ public class App {
                                     }
                                     break;
                                 case DISPLAY_CURRENT_CHOICES:
-                                    String displayCurrentCommand = CAOService.DISPLAY_CURRENT + caoNumber;
+                                    String displayCurrentCommand = CAOService.DISPLAY_CURRENT + CAOService.BREAKING_CHARACTER +caoNumber;
                                     socketWriter.println(displayCurrentCommand);
 
                                     if (displayCurrentCommand.startsWith(CAOService.DISPLAY_CURRENT))   //we expect the server to return a time
@@ -245,8 +245,19 @@ public class App {
                                         String choice = keyboard.next();
                                         courseList.add(choice);
                                     }
-                                    //pass through list of courseID updateStudentCourses (caoNumber, courseList);
-                                    //studentCourseDao.updateStudentCourses(caoNumber, courseList);
+                                    String updateCommand = CAOService.UPDATE_CHOICES + CAOService.BREAKING_CHARACTER + caoNumber + CAOService.BREAKING_CHARACTER + courseList;
+                                    socketWriter.println(updateCommand);
+
+                                    if (updateCommand.startsWith(CAOService.UPDATE_CHOICES))   //we expect the server to return a time
+                                    {
+                                        String display = socketReader.nextLine(); //wait for reply from server
+                                        if (display.startsWith(CAOService.FAILED_UPDATE)) {
+                                            System.out.println(display);
+                                        }
+                                        else{
+                                            System.out.println(display);
+                                        }
+                                    }
                                     break;
                             }
                         } catch (ArrayIndexOutOfBoundsException e) {
