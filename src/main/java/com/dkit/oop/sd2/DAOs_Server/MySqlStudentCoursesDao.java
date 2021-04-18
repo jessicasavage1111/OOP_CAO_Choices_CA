@@ -180,12 +180,12 @@ public class MySqlStudentCoursesDao extends MySqlDao implements StudentCoursesDa
     }
 
     @Override
-    public StudentCourses findStudentCourses(int caoNumber) throws DaoException
+    public List<StudentCourses> findStudentCourses(int caoNumber) throws DaoException
     {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        StudentCourses c = null;
+        List<StudentCourses> choice = new ArrayList<>();
 
         try
         {
@@ -201,7 +201,8 @@ public class MySqlStudentCoursesDao extends MySqlDao implements StudentCoursesDa
                 int cao = rs.getInt("caoNumber");
                 String courseId = rs.getString("courseid");
                 int order = rs.getInt("order");
-                c = new StudentCourses(cao, courseId, order);
+                StudentCourses c = new StudentCourses(cao, courseId, order);
+                choice.add(c);
             }
         } catch (SQLException e)
         {
@@ -227,6 +228,6 @@ public class MySqlStudentCoursesDao extends MySqlDao implements StudentCoursesDa
                 throw new DaoException("findStudentCourses() " + e.getMessage());
             }
         }
-        return c;     // s may be null
+        return choice;     // s may be null
     }
 }

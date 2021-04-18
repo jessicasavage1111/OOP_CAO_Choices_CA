@@ -39,6 +39,7 @@ package com.dkit.oop.sd2.DAOs_Server;
 import com.dkit.oop.sd2.DTOs_Core.CAOService;
 import com.dkit.oop.sd2.DTOs_Core.Course;
 import com.dkit.oop.sd2.DTOs_Core.Student;
+import com.dkit.oop.sd2.DTOs_Core.StudentCourses;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
 import java.io.*;
@@ -178,7 +179,8 @@ public class CAOServer
                     {
                         try {
                             if (!(courseDao.findCourse(parts[1]) == null)) {
-                                socketWriter.println(courseDao.findCourse(parts[1]).getCourseId() + CAOService.BREAKING_CHARACTER + courseDao.findCourse(parts[1]).getTitle() + CAOService.BREAKING_CHARACTER + courseDao.findCourse(parts[1]).getLevel() + CAOService.BREAKING_CHARACTER + courseDao.findCourse(parts[1]).getInstitution());
+                                Course c = new Course(courseDao.findCourse(parts[1]).getCourseId(), courseDao.findCourse(parts[1]).getLevel(), courseDao.findCourse(parts[1]).getTitle(), courseDao.findCourse(parts[1]).getInstitution());
+                                socketWriter.println(c);
                                 System.out.println("Course Found");
                             } else {
                                 socketWriter.println(CAOService.DISPLAY_FAILED);
@@ -207,7 +209,19 @@ public class CAOServer
                     }
                     else if (parts[0].equals(CAOService.DISPLAY_CURRENT))
                     {
-
+                        List<StudentCourses> choice = new ArrayList<>();
+                        try {
+                            choice = studentCourseDao.findStudentCourses(Integer.parseInt(parts[1]));
+                        }
+                        catch (DaoException throwables) {
+                            System.out.println("unable to find courses");
+                        }
+                        if(choice == null){
+                            socketWriter.println(CAOService.DISPLAY_ALL_FAILED);
+                        }
+                        else{
+                            socketWriter.println(choice);
+                        }
                     }
                     else if (parts[0].equals(CAOService.UPDATE_CHOICES))
                     {

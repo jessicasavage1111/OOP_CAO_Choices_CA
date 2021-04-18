@@ -204,8 +204,7 @@ public class App {
                                             System.out.println(display);
                                         }
                                         else{
-                                            String displayA[] = display.split(CAOService.BREAKING_CHARACTER);
-                                            System.out.println(displayA);
+                                            System.out.println(display);
                                         }
                                     }
                                     break;
@@ -225,7 +224,19 @@ public class App {
                                     }
                                     break;
                                 case DISPLAY_CURRENT_CHOICES:
-                                    //System.out.println(studentCourseDao.findStudentCourses(caoNumber));
+                                    String displayCurrentCommand = CAOService.DISPLAY_CURRENT + caoNumber;
+                                    socketWriter.println(displayCurrentCommand);
+
+                                    if (displayCurrentCommand.startsWith(CAOService.DISPLAY_CURRENT))   //we expect the server to return a time
+                                    {
+                                        String display = socketReader.nextLine(); //wait for reply from server
+                                        if (display.startsWith(CAOService.DISPLAY_CURRENT_FAILED)) {
+                                            System.out.println(display);
+                                        }
+                                        else{
+                                            System.out.println(display);
+                                        }
+                                    }
                                     break;
                                 case UPDATE_CHOICES:
                                     ArrayList<String> courseList = new ArrayList<>(10);

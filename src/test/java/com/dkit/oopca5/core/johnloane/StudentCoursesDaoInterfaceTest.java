@@ -41,7 +41,7 @@ public class StudentCoursesDaoInterfaceTest {
 
         StudentCourses expected = new StudentCourses(cao, course, order);
         //studentCourseDao.addStudentCourses(cao, course, order);
-        StudentCourses actual = studentCourseDao.findStudentCourses(cao);
+        //StudentCourses actual = studentCourseDao.findStudentCourses(cao);
 
         assertEquals(expected,actual);
         System.out.println("actual: " + actual);
@@ -54,7 +54,7 @@ public class StudentCoursesDaoInterfaceTest {
         StudentCoursesDaoInterface studentCourseDao = new MySqlStudentCoursesDao();
         int cao = 12345673;
 
-        StudentCourses actual = studentCourseDao.findStudentCourses(cao);
+        //StudentCourses actual = studentCourseDao.findStudentCourses(cao);
         assertNotNull(actual);
     }
 

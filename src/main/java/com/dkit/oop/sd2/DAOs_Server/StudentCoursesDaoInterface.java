@@ -12,7 +12,7 @@ public interface StudentCoursesDaoInterface {
 
     public boolean addStudentCourses(int caoNumber, ArrayList<String> courseList) throws DaoException;
 
-    public StudentCourses findStudentCourses(int caoNumber) throws DaoException;
+    public List<StudentCourses> findStudentCourses(int caoNumber) throws DaoException;
 
     public boolean updateStudentCourses(int caoNumber, ArrayList<String> courseList) throws DaoException;
 }
